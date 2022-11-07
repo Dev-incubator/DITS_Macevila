@@ -16,20 +16,22 @@
             </div>
         </div>
         <div class="users__list">
-            <div class="users__item">
+            <div class="users__item" th:each="user : ${userList}">
                 <div class="user-info">
                     <div class="user-info__control d-flex w-100 justify-content-between">
-                        <div class="user-info__name col-md-5">Username Userlastname1</div>
-                        <div class="user-info__email col-md-5">some_email@gmail.com</div>
+                        <div class="user-info__name col-md-5"
+                             th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}">
+                        </div>
+                        <div class="user-info__email col-md-5" th:text="${user.getLogin()}"></div>
                         <div class="user-buttons d-flex flex-row col-md-2 justify-content-evenly">
                             <div class="user-info__button">
                                 <img src="../../static/img/edit-icon.svg" alt="edit"
                                      th:src="@{/img/edit-icon.svg}">
                             </div>
-                            <div class="user-info__button">
+                            <button class="user-info__button">
                                 <img src="../../static/img/delete-icon.svg" alt="delete"
                                      th:src="@{/img/delete-icon.svg}">
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
