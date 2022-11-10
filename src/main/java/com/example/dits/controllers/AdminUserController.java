@@ -1,6 +1,10 @@
 package com.example.dits.controllers;
 
 import com.example.dits.dto.UserInfoDTO;
+import com.example.dits.entity.Role;
+import com.example.dits.entity.User;
+import com.example.dits.mapper.UserMapper;
+import com.example.dits.service.RoleService;
 import com.example.dits.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,27 +20,45 @@ import java.util.List;
 public class AdminUserController {
     @Autowired
     UserService service;
+    @Autowired
+    RoleService roleService;
+    @Autowired
+    UserMapper mapper;
     @GetMapping("/userEditor")
     public String getUsers(ModelMap model) {
         model.addAttribute("userList", getUserList());
         model.addAttribute("title", "User editor");
-        return "admin/user-list";
+        return "/admin/user-editor" ;
     }
 
-    @DeleteMapping("/deleteUser")
-    public List<UserInfoDTO> deleteUser(@RequestParam int id) {
-        service.delete(id);
+    @DeleteMapping("/removeUser")
+    public List<UserInfoDTO> removeUser(@RequestParam int userId) {
+        service.delete(userId);
         return getUserList();
     }
 
     @ResponseBody
-    @PostMapping("/editUser")
+    @PutMapping("/editUser")
     public List<UserInfoDTO> editUser(@RequestBody UserInfoDTO userInfoDTO) {
-        service.update(userInfoDTO, userInfoDTO.getUserId());
+        User user = null;
+        int userId = userInfoDTO.getUserId();
+        Role role = roleService.getRoleByRoleName(userInfoDTO.getRole());
+
+        try {
+            service.update(userInfoDTO, userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+       user  = mapper.convertUserInfoDTOToUser(userInfoDTO);
+       user.setRole(role);
+
         return getUserList();
     }
 
-    public List<UserInfoDTO> createUser(@RequestBody UserInfoDTO userInfoDTO) {
+    @ResponseBody
+    @PostMapping("/addUser")
+    public List<UserInfoDTO> addUser(@RequestBody UserInfoDTO userInfoDTO) {
         service.save(userInfoDTO);
         return getUserList();
     }

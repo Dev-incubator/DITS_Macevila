@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
         userEdited.setLastName(userInfoDTO.getLastName());
         userEdited.setRole(userRole);
         userEdited.setLogin(userInfoDTO.getLogin());
+        userEdited.setPassword(userInfoDTO.getPassword());
     }
 
     @Transactional
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(userInfoDTO.getLastName())
                 .role(role)
                 .login(userInfoDTO.getLogin())
+                .password(userInfoDTO.getPassword())
                 .build();
         repository.save(user);
     }

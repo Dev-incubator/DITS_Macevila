@@ -30,7 +30,6 @@ public class User {
     @Column
     private String password;
 
-
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinTable(name = "users_role"
     , joinColumns = @JoinColumn(name = "userId")
