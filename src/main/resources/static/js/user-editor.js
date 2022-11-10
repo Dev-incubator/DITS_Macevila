@@ -112,6 +112,7 @@ async function editUser(userId, firstName, lastName, role, login, password) {
     const result = await response.json();
     usersData = result;
     await setNewUsers(usersData);
+    location.reload();
 }
 
 async function deleteUser(userId) {

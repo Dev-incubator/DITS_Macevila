@@ -8,6 +8,8 @@ import com.example.dits.service.RoleService;
 import com.example.dits.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final ModelMapper modelMapper;
     private final RoleService roleService;
+    private final PasswordEncoder encoder = new BCryptPasswordEncoder();
     @Transactional
     @Override
     public void update(UserInfoDTO userInfoDTO, int id) {
@@ -30,7 +33,7 @@ public class UserServiceImpl implements UserService {
         userEdited.setLastName(userInfoDTO.getLastName());
         userEdited.setRole(userRole);
         userEdited.setLogin(userInfoDTO.getLogin());
-        userEdited.setPassword(userInfoDTO.getPassword());
+        userEdited.setPassword(encoder.encode(userInfoDTO.getPassword())    );
     }
 
     @Transactional
@@ -48,7 +51,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(userInfoDTO.getLastName())
                 .role(role)
                 .login(userInfoDTO.getLogin())
-                .password(userInfoDTO.getPassword())
+                .password(encoder.encode(userInfoDTO.getPassword()))
                 .build();
         repository.save(user);
     }
