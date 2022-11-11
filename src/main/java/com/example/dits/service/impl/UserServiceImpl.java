@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         userEdited.setLastName(userInfoDTO.getLastName());
         userEdited.setRole(userRole);
         userEdited.setLogin(userInfoDTO.getLogin());
-        userEdited.setPassword(encoder.encode(userInfoDTO.getPassword())    );
+        userEdited.setPassword(encoder.encode(userInfoDTO.getPassword()));
     }
 
     @Transactional
