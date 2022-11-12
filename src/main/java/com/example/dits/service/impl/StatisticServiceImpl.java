@@ -104,6 +104,24 @@ public class StatisticServiceImpl implements StatisticService {
         return getTestStatistics(topic);
     }
 
+    @Transactional
+    @Override
+    public List<TestStatisticByUser> getListOfUserTestStatisticsByUser(User user) {
+        List<Statistic> statistics = repository.getStatisticsByUser(user);
+        List<TestStatisticByUser> testStatisticsByUser = new ArrayList<>();
+        Map<String, List<Statistic>> map = getMapWithStatisticsByTestName(statistics);
+
+        map.forEach((testName, statisticList) -> {
+            testStatisticsByUser.add(TestStatisticByUser.builder()
+                    .testName(testName)
+                    .count(statisticList.size())
+                    .avgProc(getAvgProcOfRightAnswers(statisticList))
+                    .build());
+        });
+
+        return testStatisticsByUser;
+    }
+
     private List<TestStatistic> getTestStatistics(Topic topic) {
         List<Test> testLists = topic.getTestList();
         List<TestStatistic> testStatistics = new ArrayList<>();
@@ -111,6 +129,39 @@ public class StatisticServiceImpl implements StatisticService {
         setTestLists(testLists, testStatistics);
         Collections.sort(testStatistics);
         return testStatistics;
+    }
+
+    private Map<String, List<Statistic>> getMapWithStatisticsByTestName(List<Statistic> statistics) {
+        Map<String, List<Statistic>> map = new HashMap<>();
+
+        for (Statistic statistic : statistics) {
+            Test test = statistic.getQuestion().getTest();
+            List<Statistic> list = map.get(test.getName());
+
+            if (list != null) {
+                list.add(statistic);
+            } else {
+                List<Statistic> statisticList = new ArrayList<>();
+                statisticList.add(statistic);
+                map.put(test.getName(), statisticList);
+            }
+        }
+
+        return map;
+    }
+
+    private int getAvgProcOfRightAnswers(List<Statistic> statisticList) {
+        int rightAnswers = 0;
+        int avgProc = 0;
+
+        for (Statistic statistic : statisticList) {
+            if (statistic.isCorrect()) {
+                rightAnswers++;
+            }
+        }
+
+        avgProc = (int) Math.round((double) rightAnswers / statisticList.size() * 100);
+        return avgProc;
     }
 
     private void setTestLists(List<Test> testLists, List<TestStatistic> testStatistics) {

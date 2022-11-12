@@ -2,6 +2,7 @@ package com.example.dits.controllers;
 
 import com.example.dits.dto.*;
 import com.example.dits.entity.Topic;
+import com.example.dits.service.StatisticService;
 import com.example.dits.service.TopicService;
 import com.example.dits.service.UserService;
 import com.example.dits.service.impl.StatisticServiceImpl;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminStatisticController {
-    private final StatisticServiceImpl statisticService;
+    private final StatisticService statisticService;
     private final TopicService topicService;
     private final UserService userService;
 

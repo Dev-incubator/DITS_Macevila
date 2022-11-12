@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface UserService {
     UserInfoDTO getUserInfoByLogin(String login);
+    UserInfoDTO getUserInfoById(Integer id);
     User getUserByLogin(String login);
+    User getUserById(Integer id);
     List<UserInfoDTO> getAllUsers();
+
+    void save(User user);
 }
