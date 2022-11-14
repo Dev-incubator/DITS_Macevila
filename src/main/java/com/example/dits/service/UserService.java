@@ -11,6 +11,10 @@ public interface UserService {
     void delete(int id);
     void save(UserInfoDTO userInfoDTO);
     UserInfoDTO getUserInfoByLogin(String login);
+    UserInfoDTO getUserInfoById(Integer id);
     User getUserByLogin(String login);
+    User getUserById(Integer id);
     List<UserInfoDTO> getAllUsers();
+
+    void save(User user);
 }

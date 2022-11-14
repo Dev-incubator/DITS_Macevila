@@ -61,13 +61,28 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(repository.getUserByLogin(login), UserInfoDTO.class);
     }
 
+    @Transactional
+    public UserInfoDTO getUserInfoById(Integer id) {
+        return modelMapper.map(repository.getUserByUserId(id), UserInfoDTO.class);
+    }
+
     @Override
     public User getUserByLogin(String login) {
         return repository.getUserByLogin(login);
     }
 
     @Override
+    public User getUserById(Integer id) {
+        return repository.getUserByUserId(id);
+    }
+
+    @Override
     public List<UserInfoDTO> getAllUsers() {
         return repository.findAll().stream().map(f -> modelMapper.map(f, UserInfoDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void save(User user) {
+        repository.save(user);
     }
 }

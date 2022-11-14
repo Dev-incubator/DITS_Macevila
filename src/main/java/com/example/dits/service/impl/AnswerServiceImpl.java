@@ -76,7 +76,7 @@ public class AnswerServiceImpl implements AnswerService {
         } else if(!rightIndexesList.isEmpty() && answeredQuestion == null) {
             return false;
         } else {
-            return answeredQuestion.equals(rightIndexesList);
+            return rightIndexesList.equals(answeredQuestion);
         }
     }
 

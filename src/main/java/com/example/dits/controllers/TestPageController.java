@@ -90,11 +90,11 @@ public class TestPageController {
         boolean isCorrect = answerService.isRightAnswer(answeredQuestion,questions,questionNumber);
         UserInfoDTO user = (UserInfoDTO) session.getAttribute("user");
         List<StatisticDTO> statisticList = (List<StatisticDTO>) session.getAttribute("statistics");
-
         checkIfResultPage(questions, questionNumber, isCorrect, user, statisticList);
+        setResultAttributes(session, statisticList);
         statisticService.saveListOfStatisticsToDB(statisticList);
         model.addAttribute("title","Result");
-        return "redirect:/user/chooseTest";
+        return "user/resultPage";
     }
 
     private void checkIfResultPage(List<QuestionDTO> questions, int questionNumber, boolean isCorrect, UserInfoDTO user, List<StatisticDTO> statisticList) {
@@ -111,5 +111,11 @@ public class TestPageController {
         return statisticList.size() >= questionNumber;
     }
 
+    private void setResultAttributes(HttpSession session, List<StatisticDTO> statisticList) {
+        long quantityOfRightAnswers = statisticList.stream().filter(StatisticDTO::isCorrect).count();
+        int resultPercentage = (int) Math.round((double) quantityOfRightAnswers / statisticList.size() * 100);
 
+        session.setAttribute("quantityOfRightAnswers", quantityOfRightAnswers);
+        session.setAttribute("resultPercentage", resultPercentage);
+    }
 }

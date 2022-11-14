@@ -1117,6 +1117,10 @@ select option {
     font-weight: 400;
 }
 
+.submit-button {
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+}
+
 .submit-button:hover {
     background-color: #007802;
     color: #fff;

@@ -23,7 +23,7 @@ themeSelect.addEventListener('change', async ({target}) => {
 
 async function getUserTestStatistics(target) {
     const userId = target.value;
-    const url = new URL(baseUrl + "/admin/getUserTestsStatistic");
+    const url = new URL(baseUrl + "/users/" + userId + "/statistics");
     const params = {id: userId};
     url.search = new URLSearchParams(params).toString();
     const response = await fetch(url.toString());
