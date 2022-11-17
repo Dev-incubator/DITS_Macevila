@@ -20,6 +20,12 @@ public class UsersRestController {
     private final UserService userService;
     private final StatisticService statisticService;
 
+    @GetMapping
+    public List<UserInfoDTO> getUsers() {
+        return userService.getAllUsers();
+    }
+
+
     @GetMapping("/{id}")
     public UserInfoDTO getUser(@PathVariable("id") Integer id) {
         return userService.getUserInfoById(id);

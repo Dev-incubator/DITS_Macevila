@@ -13,4 +13,10 @@ public interface UserService {
     List<UserInfoDTO> getAllUsers();
 
     void save(User user);
+
+    void update(User user, Integer id);
+
+    void delete(User user);
+
+    List<User> findAll();
 }

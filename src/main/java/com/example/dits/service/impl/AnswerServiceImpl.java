@@ -32,11 +32,9 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Transactional
     public void update(Answer a, int id) {
-        Optional<Answer> answer = repo.findById(id);
-        if(answer.isEmpty())
-            return;
-        else
+        if (repo.findById(id).isPresent()) {
             repo.save(a);
+        }
     }
 
     @Transactional

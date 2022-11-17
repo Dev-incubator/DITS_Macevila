@@ -2,7 +2,7 @@
 
 <main>
     <div class="container">
-        <div th:if="${statistics == null}">
+        <div th:if="${statistics == null || statistics.isEmpty()}">
             <div class="title align-items-baseline">
                 <h1 class="start" th:text="${session.user.getFirstName()} + ' ' + ${session.user.getLastName()}"></h1>
             </div>
@@ -15,7 +15,7 @@
                 </form>
             </div>
         </div>
-        <div th:if="${statistics != null}">
+        <div th:if="${statistics != null && !statistics.isEmpty()}">
             <section class="result col-12">
                 <div class="result__container container">
                     <div class="row justify-content-center result__head">
