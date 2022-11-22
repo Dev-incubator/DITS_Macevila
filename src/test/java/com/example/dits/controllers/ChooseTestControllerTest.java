@@ -16,29 +16,50 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @WithMockUser(username = "user", authorities = {"ROLE_USER"})
 public class ChooseTestControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+
     @MockBean
     TopicService topicService;
+
     @MockBean
     TestService testService;
-    @Autowired
-    MockMvc mockMvc;
+
+    @Test
+    void testUserPage() throws Exception {
+        when(topicService.getTopicsWithQuestions()).thenReturn(new ArrayList<TopicDTO>());
+
+        mockMvc.perform(get("/user/chooseTest"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testGetTestNameAndDescriptionFromTopic() throws Exception {
+        when(testService.getTestsByTopicName("someTopic")).thenReturn(new ArrayList<TestInfoDTO>());
+
+        mockMvc.perform(get("/user/chooseTheme"))
+                .andExpect(status().isOk());
+    }
 
     @Test
     void shouldReturn200WhenChooseTest() throws Exception {
         when(topicService.getTopicsWithQuestions()).thenReturn(List.of(new TopicDTO()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/chooseTest").contentType(MediaType.TEXT_HTML))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(get("/user/chooseTest").contentType(MediaType.TEXT_HTML))
+                .andExpect(status().isOk());
 
         verify(topicService, times(1)).getTopicsWithQuestions();
         verifyNoMoreInteractions(topicService);
@@ -48,10 +69,10 @@ public class ChooseTestControllerTest {
     void shouldReturnListOfTestInfoDTOWhenValidRequestParam() throws Exception {
         when(testService.getTestsByTopicName(anyString())).thenReturn(List.of(new TestInfoDTO()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/chooseTheme")
+        mockMvc.perform(get("/user/chooseTheme")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("theme", anyString()))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(status().isOk());
 
         verify(testService, times(1)).getTestsByTopicName(anyString());
         verifyNoMoreInteractions(testService);
@@ -59,8 +80,8 @@ public class ChooseTestControllerTest {
 
     @Test
     void shouldReturnEmptyListWhenEmptyRequestParam() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/chooseTheme").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(get("/user/chooseTheme").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
 
         verifyNoInteractions(testService);
     }
