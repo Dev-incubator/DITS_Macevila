@@ -5,6 +5,11 @@ import com.example.dits.dto.QuestionDTO;
 import com.example.dits.dto.StatisticDTO;
 import com.example.dits.dto.UserInfoDTO;
 import com.example.dits.service.*;
+import com.example.dits.service.AnswerService;
+import com.example.dits.service.QuestionService;
+import com.example.dits.service.StatisticService;
+import com.example.dits.service.TestService;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,12 +28,14 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @WithMockUser(username = "user", authorities = {"ROLE_USER"})
 public class TestPageControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
