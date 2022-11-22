@@ -43,12 +43,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                    .antMatchers("/", "/login").permitAll()
-                    .antMatchers("/","/user/**").hasRole("USER")
-                    .antMatchers("/","/admin/**").hasRole("ADMIN")
+                .antMatchers("/", "/login").permitAll()
+                .antMatchers("/","/user/**").hasRole("USER")
+                .antMatchers("/","/admin/**").hasRole("ADMIN")
                 .and().formLogin().loginPage("/login")
-                    .successHandler(customSuccessHandler)
-                    .usernameParameter("login").passwordParameter("password").failureUrl("/login?fail=1")
+                .successHandler(customSuccessHandler)
+                .usernameParameter("login").passwordParameter("password").failureUrl("/login?fail=1")
                 .and().csrf()
                 .and().exceptionHandling().accessDeniedPage("/accessDenied");
     }

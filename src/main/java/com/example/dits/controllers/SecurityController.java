@@ -23,7 +23,7 @@ public class SecurityController {
     public String loginHandle(HttpSession session) {
         session.setAttribute("user", userService.getUserInfoByLogin(getUsername()));
         String authority = getAuthority();
-        return authority.contains("USER") ? "redirect:/user/chooseTest" : "redirect:/admin/testBuilder";
+        return authority.contains("USER") ? "redirect:/user/chooseTest" : "redirect:/admin/userEditor";
     }
 
     @GetMapping("/login")

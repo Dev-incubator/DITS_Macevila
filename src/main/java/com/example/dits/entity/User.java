@@ -3,6 +3,7 @@ package com.example.dits.entity;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 @Entity
 @Table(name = "users")
 public class User {
@@ -28,7 +30,6 @@ public class User {
     private String login;
     @Column
     private String password;
-
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinTable(name = "users_role"

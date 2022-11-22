@@ -1,4 +1,5 @@
 package com.example.dits.controllers;
+
 import com.example.dits.dto.TestInfoDTO;
 import com.example.dits.dto.TopicDTO;
 import com.example.dits.service.TestService;
@@ -26,13 +27,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WithMockUser(username = "user", authorities = {"ROLE_USER"})
 public class ChooseTestControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     TopicService topicService;
+
     @MockBean
     TestService testService;
+    
     @Test
     void testUserPage() throws Exception {
         when(topicService.getTopicsWithQuestions()).thenReturn(new ArrayList<TopicDTO>());

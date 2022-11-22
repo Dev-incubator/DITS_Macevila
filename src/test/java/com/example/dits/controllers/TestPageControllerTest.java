@@ -1,4 +1,5 @@
 package com.example.dits.controllers;
+
 import com.example.dits.dto.AnswerDTO;
 import com.example.dits.dto.QuestionDTO;
 import com.example.dits.dto.StatisticDTO;
@@ -8,7 +9,6 @@ import com.example.dits.service.AnswerService;
 import com.example.dits.service.QuestionService;
 import com.example.dits.service.StatisticService;
 import com.example.dits.service.TestService;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,12 +20,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
@@ -40,15 +38,19 @@ public class TestPageControllerTest {
 
     @MockBean
     TestService testService;
-    @MockBean
-    QuestionService questionService;
-    @MockBean
-    AnswerService answerService;
-    @MockBean
-    StatisticService statisticService;
 
     @MockBean
+    QuestionService questionService;
+   
+    @MockBean
+    AnswerService answerService;
+    
+    @MockBean
+    StatisticService statisticService;
+    
+    @MockBean
     UserService userService;
+
 
     @Test
     void testGoTest() throws Exception {
@@ -56,22 +58,27 @@ public class TestPageControllerTest {
         int questionNumber = 0;
         String questionDescription = "some description";
         var test = new com.example.dits.entity.Test();
+
         List<QuestionDTO> questionList = new ArrayList<>();
         List<AnswerDTO> answers = new ArrayList<>();
+
         when(testService.getTestByTestId(testId)).thenReturn(test);
         when(questionService.getQuestionsByTest(test)).thenReturn(questionList);
         when(answerService.getAnswersFromQuestionList(questionList, questionNumber)).thenReturn(answers);
         when(questionService.getDescriptionFromQuestionList(questionList, questionNumber)).thenReturn(questionDescription);
+
         mockMvc.perform(MockMvcRequestBuilders.get("/user/goTest")
                         .param("testId", String.valueOf(testId))
                         .param("theme", "some theme"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
     void testNextTestPage() throws Exception {
         int questionNumber = 1;
         String questionDescription = "some description";
         boolean isCorrect = true;
+
         List<QuestionDTO> questionList = initializeQuestionDTOList();
         List<AnswerDTO> answers = new ArrayList<>();
         List<Integer> answeredQuestion = new ArrayList<>();
@@ -82,16 +89,18 @@ public class TestPageControllerTest {
                 .username(user.getLogin())
                 .isCorrect(isCorrect)
                 .build());
+                
         when(answerService.isRightAnswer(answeredQuestion, questionList, questionNumber)).thenReturn(isCorrect);
         when(answerService.getAnswersFromQuestionList(questionList, questionNumber)).thenReturn(answers);
         when(questionService.getDescriptionFromQuestionList(questionList, questionNumber)).thenReturn(questionDescription);
+
         mockMvc.perform(MockMvcRequestBuilders.get("/user/nextTestPage")
                         .sessionAttr("questions", questionList)
                         .sessionAttr("questionNumber", questionNumber)
                         .sessionAttr("user", user)
                         .sessionAttr("statistics", statisticList))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-    }
+
     @Test
     void testTestStatistic() throws Exception {
         String topicName = "topicName";
@@ -101,6 +110,7 @@ public class TestPageControllerTest {
         int questionSize = 12;
         int questionNumber = 1;
         boolean isCorrect = true;
+
         List<Integer> answeredQuestion = new ArrayList<>();
         List<QuestionDTO> questionList = initializeQuestionDTOList();
         UserInfoDTO user = initializeUserInfoDTO();
@@ -110,7 +120,9 @@ public class TestPageControllerTest {
                 .username(user.getLogin())
                 .isCorrect(isCorrect)
                 .build());
+
         when(answerService.isRightAnswer(answeredQuestion, questionList, questionNumber)).thenReturn(isCorrect);
+
         mockMvc.perform(MockMvcRequestBuilders.get("/user/resultPage")
                         .sessionAttr("topicName", topicName)
                         .sessionAttr("testName", testName)
@@ -122,9 +134,11 @@ public class TestPageControllerTest {
                         .sessionAttr("statistics", statisticList))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     private UserInfoDTO initializeUserInfoDTO() {
         return new UserInfoDTO(1, "firstName", "lastName", "user", "USER", "somePassword");
     }
+
     private List<QuestionDTO> initializeQuestionDTOList() {
         List<QuestionDTO> questionList = new ArrayList<>();
         questionList.add(new QuestionDTO(1, "some description"));
