@@ -2,6 +2,8 @@ package com.example.dits.mapper;
 import com.example.dits.dto.TestStatisticByUser;
 import com.example.dits.entity.Statistic;
 import com.example.dits.entity.Test;
+import com.example.dits.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,14 +13,21 @@ import java.util.Map;
 
 @Component
 public class TestStatisticByUserMapper {
-    public List<TestStatisticByUser> map(List<Statistic> statistics) {
+private final QuestionService questionService;
+
+    @Autowired
+    public TestStatisticByUserMapper(QuestionService questionService) {
+        this.questionService = questionService;
+    }
+
+    public List<TestStatisticByUser> map(List<Statistic> statisticsOfUser) {
         List<TestStatisticByUser> testStatisticsByUser = new ArrayList<>();
-        Map<String, List<Statistic>> map = getMapWithStatisticsByTestName(statistics);
+        Map<String, List<Statistic>> map = getMapWithStatisticsByTestName(statisticsOfUser);
 
         map.forEach((testName, statisticList) -> {
             testStatisticsByUser.add(TestStatisticByUser.builder()
                     .testName(testName)
-                    .count(statisticList.size())
+                    .count(statisticList.size() / questionService.getQuestionsByTestName(testName).size())
                     .avgProc(getAvgProcOfRightAnswers(statisticList))
                     .build());
         });
@@ -28,19 +37,10 @@ public class TestStatisticByUserMapper {
 
     private Map<String, List<Statistic>> getMapWithStatisticsByTestName(List<Statistic> statistics) {
         Map<String, List<Statistic>> map = new HashMap<>();
-
-        for (Statistic statistic : statistics) {
-            Test test = statistic.getQuestion().getTest();
-            List<Statistic> list = map.get(test.getName());
-
-            if (list != null) {
-                list.add(statistic);
-            } else {
-                List<Statistic> statisticList = new ArrayList<>();
-                statisticList.add(statistic);
-                map.put(test.getName(), statisticList);
-            }
-        }
+        statistics.forEach(stat -> {
+            Test test = stat.getQuestion().getTest();
+            map.computeIfAbsent(test.getName(), k -> new ArrayList<>()).add(stat);
+        });
 
         return map;
     }

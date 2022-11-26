@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Answer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column
     private int answerId;
     @Column

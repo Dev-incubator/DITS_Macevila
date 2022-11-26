@@ -21,12 +21,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
@@ -44,12 +42,16 @@ public class TestPageControllerTest {
 
     @MockBean
     QuestionService questionService;
-
+   
     @MockBean
     AnswerService answerService;
-
+    
     @MockBean
     StatisticService statisticService;
+    
+    @MockBean
+    UserService userService;
+
 
     @MockBean
     UserService userService;
@@ -91,7 +93,7 @@ public class TestPageControllerTest {
                 .username(user.getLogin())
                 .isCorrect(isCorrect)
                 .build());
-
+                
         when(answerService.isRightAnswer(answeredQuestion, questionList, questionNumber)).thenReturn(isCorrect);
         when(answerService.getAnswersFromQuestionList(questionList, questionNumber)).thenReturn(answers);
         when(questionService.getDescriptionFromQuestionList(questionList, questionNumber)).thenReturn(questionDescription);
@@ -102,8 +104,6 @@ public class TestPageControllerTest {
                         .sessionAttr("user", user)
                         .sessionAttr("statistics", statisticList))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-
-    }
 
     @Test
     void testTestStatistic() throws Exception {

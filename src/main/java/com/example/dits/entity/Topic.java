@@ -17,7 +17,7 @@ import java.util.List;
 public class Topic {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int topicId;
 
     public Topic(String name) {

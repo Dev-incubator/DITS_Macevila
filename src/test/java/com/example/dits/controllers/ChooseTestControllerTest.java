@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WithMockUser(username = "user", authorities = {"ROLE_USER"})
 public class ChooseTestControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -35,19 +36,16 @@ public class ChooseTestControllerTest {
 
     @MockBean
     TestService testService;
-
+    
     @Test
     void testUserPage() throws Exception {
         when(topicService.getTopicsWithQuestions()).thenReturn(new ArrayList<TopicDTO>());
-
         mockMvc.perform(get("/user/chooseTest"))
                 .andExpect(status().isOk());
     }
-
     @Test
     void testGetTestNameAndDescriptionFromTopic() throws Exception {
         when(testService.getTestsByTopicName("someTopic")).thenReturn(new ArrayList<TestInfoDTO>());
-
         mockMvc.perform(get("/user/chooseTheme"))
                 .andExpect(status().isOk());
     }
