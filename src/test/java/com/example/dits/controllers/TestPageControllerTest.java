@@ -9,6 +9,7 @@ import com.example.dits.service.AnswerService;
 import com.example.dits.service.QuestionService;
 import com.example.dits.service.StatisticService;
 import com.example.dits.service.TestService;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,6 +52,9 @@ public class TestPageControllerTest {
     @MockBean
     UserService userService;
 
+
+    @MockBean
+    UserService userService;
 
     @Test
     void testGoTest() throws Exception {
