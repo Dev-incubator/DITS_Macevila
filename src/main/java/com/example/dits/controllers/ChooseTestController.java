@@ -10,6 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,8 +32,13 @@ public class ChooseTestController {
     @ResponseBody
     @GetMapping("/chooseTheme")
     public List<TestInfoDTO> getTestNameAndDescriptionFromTopic(@RequestParam(value = "theme", required = false) String topicName, HttpSession session) {
-        List<TestInfoDTO> tests = testService.getTestsByTopicName(topicName);
-        session.setAttribute("tests", tests);
+        List<TestInfoDTO> tests = new ArrayList<>();
+
+        if (topicName != null) {
+            tests = testService.getTestsByTopicName(topicName);
+            session.setAttribute("tests", tests);
+        }
+
         return tests;
     }
 }

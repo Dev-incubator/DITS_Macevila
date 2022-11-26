@@ -63,7 +63,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public UserInfoDTO getUserInfoById(Integer id) {
-        return modelMapper.map(repository.getUserByUserId(id), UserInfoDTO.class);
+        User user = repository.getUserByUserId(id);
+
+        if (user != null) {
+            return modelMapper.map(user, UserInfoDTO.class);
+        }
+
+        return new UserInfoDTO();
     }
 
     @Override
@@ -84,5 +90,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         repository.save(user);
+    }
+
+    @Override
+    public void update(User user, Integer id) {
+        if (repository.findById(id).isPresent()) {
+            repository.save(user);
+        }
+    }
+
+    @Override
+    public void delete(User user) {
+        repository.delete(user);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return repository.findAll();
     }
 }

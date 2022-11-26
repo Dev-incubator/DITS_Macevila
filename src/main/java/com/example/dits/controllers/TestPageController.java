@@ -25,6 +25,11 @@ public class TestPageController {
     private final AnswerService answerService;
     private final StatisticService statisticService;
 
+    @GetMapping
+    public String user() {
+        return "forward:user/chooseTest";
+    }
+
     @GetMapping("/goTest")
     public String goTest(@RequestParam int testId, @RequestParam(value = "theme") String topicName, ModelMap model, HttpSession session){
 
