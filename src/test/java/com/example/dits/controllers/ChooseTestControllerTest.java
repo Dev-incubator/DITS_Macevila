@@ -36,7 +36,7 @@ public class ChooseTestControllerTest {
 
     @MockBean
     TestService testService;
-    
+
     @Test
     void testUserPage() throws Exception {
         when(topicService.getTopicsWithQuestions()).thenReturn(new ArrayList<TopicDTO>());

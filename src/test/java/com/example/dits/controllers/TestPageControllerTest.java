@@ -42,10 +42,10 @@ public class TestPageControllerTest {
 
     @MockBean
     QuestionService questionService;
-   
+
     @MockBean
     AnswerService answerService;
-    
+
     @MockBean
     StatisticService statisticService;
     
